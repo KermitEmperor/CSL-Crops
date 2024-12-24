@@ -1,8 +1,7 @@
-package net.kermir.cslcrops;
+package net.kermir.cslcrops.tooltip;
 
 import com.momosoftworks.coldsweat.api.util.Temperature;
 import net.kermir.cslcrops.data.CropData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
 public class TempTooltipComponent implements TooltipComponent {

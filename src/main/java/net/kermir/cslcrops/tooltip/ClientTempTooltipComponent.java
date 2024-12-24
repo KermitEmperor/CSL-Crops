@@ -1,7 +1,8 @@
-package net.kermir.cslcrops;
+package net.kermir.cslcrops.tooltip;
 
 import com.momosoftworks.coldsweat.api.util.Temperature;
 import com.momosoftworks.coldsweat.config.spec.ClientSettingsConfig;
+import net.kermir.cslcrops.Cslcrops;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

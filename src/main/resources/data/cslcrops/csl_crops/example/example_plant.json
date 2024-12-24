@@ -1,0 +1,8 @@
+{
+  "min": 0,
+  "max": 0,
+  "type": "C",
+  "transforms_cold": "example_mod:example_frost_plant",
+  "transforms_hot": "example_mod:example_dry_plant",
+  "seed": "example_mod:example_crop_seed"
+}
