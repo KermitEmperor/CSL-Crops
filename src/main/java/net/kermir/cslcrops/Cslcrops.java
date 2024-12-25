@@ -3,7 +3,6 @@ package net.kermir.cslcrops;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.momosoftworks.coldsweat.api.util.Temperature;
-import com.momosoftworks.coldsweat.util.world.WorldHelper;
 import net.kermir.cslcrops.data.CropData;
 import net.kermir.cslcrops.data.CropsNSeedsData;
 import net.kermir.cslcrops.network.PacketChannel;
@@ -14,9 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,8 +40,8 @@ public class Cslcrops {
     public static final String MODID = "cslcrops";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
-    public Cslcrops() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public Cslcrops(FMLJavaModLoadingContext context) {
+        IEventBus modEventBus = context.getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerTooltip);
@@ -75,6 +72,7 @@ public class Cslcrops {
 
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public void onTooltip(RenderTooltipEvent.GatherComponents event) {
 
         String resLoc = ForgeRegistries.ITEMS.getKey(event.getItemStack().getItem()).toString();
@@ -90,6 +88,7 @@ public class Cslcrops {
         event.register(TempTooltipComponent.class, ClientTempTooltipComponent::new);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public void onCropGrowth(BlockEvent.CropGrowEvent.Pre event) {
         if (event.getLevel() != null) {
             String blockResLoc = ForgeRegistries.BLOCKS.getKey(event.getState().getBlock()).toString();
@@ -98,6 +97,7 @@ public class Cslcrops {
         }
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public void onTreeGrowth(SaplingGrowTreeEvent event) {
         if (event.getLevel() != null) {
             String blockResLoc = ForgeRegistries.BLOCKS.getKey(event.getLevel().getBlockState(event.getPos()).getBlock()).toString();
@@ -107,20 +107,21 @@ public class Cslcrops {
     }
 
 
+    @SuppressWarnings("DataFlowIssue")
     private void onTreeAndPlant(Level level, String blockResLoc, BlockPos blockPos, Event event) {
         if (CropsNSeedsData.CROPS_MAP.containsKey(blockResLoc)) {
             double temp = Temperature.getTemperatureAt(blockPos, level);
             CropData data = CropsNSeedsData.CROPS_MAP.get(blockResLoc);
 
             if (data.isColder(temp, Temperature.Units.MC)) event.setResult(Event.Result.DENY);
-            data.onCold(temp, Temperature.Units.MC, (resourceLocation -> {
-                level.setBlock(blockPos, ForgeRegistries.BLOCKS.getValue(resourceLocation).defaultBlockState(), 2);
-            }));
+            data.onCold(temp, Temperature.Units.MC, (resourceLocation ->
+                level.setBlock(blockPos, ForgeRegistries.BLOCKS.getValue(resourceLocation).defaultBlockState(), 2)
+            ));
 
             if (data.isWarmer(temp, Temperature.Units.MC)) event.setResult(Event.Result.DENY);
-            data.onHot(temp, Temperature.Units.MC, (resourceLocation -> {
-                level.setBlock(blockPos, ForgeRegistries.BLOCKS.getValue(resourceLocation).defaultBlockState(), 2);
-            }));
+            data.onHot(temp, Temperature.Units.MC, (resourceLocation ->
+                level.setBlock(blockPos, ForgeRegistries.BLOCKS.getValue(resourceLocation).defaultBlockState(), 2)
+            ));
         }
     }
 

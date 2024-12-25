@@ -10,14 +10,16 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
+@SuppressWarnings("NullableProblems")
 public class ClientTempTooltipComponent implements ClientTooltipComponent {
     private String textCold = "";
     private int textColdLength = 0;
     private String textHot = "";
     private int textHotLength = 0;
-    private Minecraft mc;
+    private final Minecraft mc;
 
     public static final ResourceLocation WIDGETS = new ResourceLocation(Cslcrops.MODID, "textures/gui/tooltip/widgets.png");
 
@@ -50,7 +52,7 @@ public class ClientTempTooltipComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(Font pFont, int pMouseX, int pMouseY, Matrix4f pMatrix, MultiBufferSource.BufferSource pBufferSource) {
+    public void renderText(@NotNull Font pFont, int pMouseX, int pMouseY, Matrix4f pMatrix, MultiBufferSource.BufferSource pBufferSource) {
         ClientTooltipComponent.super.renderText(pFont, pMouseX, pMouseY, pMatrix, pBufferSource);
         //pFont.drawInBatch(this.text, (float)pMouseX, (float)pMouseY, -1, true, pMatrix, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
     }

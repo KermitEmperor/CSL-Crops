@@ -1,8 +1,6 @@
 package net.kermir.cslcrops.compat.jade;
 
-import net.kermir.cslcrops.Cslcrops;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;

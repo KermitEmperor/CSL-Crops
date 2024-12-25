@@ -6,20 +6,14 @@ import com.google.gson.JsonElement;
 import net.kermir.cslcrops.Cslcrops;
 import net.kermir.cslcrops.network.PacketChannel;
 import net.kermir.cslcrops.network.SyncDataPacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CropsNSeedsData extends SimpleJsonResourceReloadListener {
@@ -35,6 +29,7 @@ public class CropsNSeedsData extends SimpleJsonResourceReloadListener {
     }
 
 
+    @SuppressWarnings("NullableProblems")
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> elementMap, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         CROPS_MAP = new HashMap<>();
@@ -51,10 +46,13 @@ public class CropsNSeedsData extends SimpleJsonResourceReloadListener {
             Cslcrops.LOGGER.info("E: {} || {}", savedAsName, jsonElement);
         });
 
+        Cslcrops.LOGGER.info("{} crop(s) with temp stats were added", CROPS_MAP.size());
+        Cslcrops.LOGGER.info("{} seed(s) with temp stats were added", SEEDS_LIST.size());
+
         //TODO this
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER)
             try {
                 PacketChannel.sendToAllClients(new SyncDataPacket(CROPS_MAP, SEEDS_LIST));
-            } catch (Exception e) {}
+            } catch (Exception ignored) {}
     }
 }

@@ -1,13 +1,11 @@
 package net.kermir.cslcrops.network;
 
-import net.kermir.cslcrops.Cslcrops;
 import net.kermir.cslcrops.data.CropData;
 import net.kermir.cslcrops.data.CropsNSeedsData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
@@ -34,14 +32,13 @@ public class SyncDataPacket {
 
 
     //TODO this packet
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
     public boolean handle(Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
 
         if (Minecraft.getInstance().player != null) {
             CropsNSeedsData.CROPS_MAP = this.crop_map;
             CropsNSeedsData.SEEDS_LIST = this.seeds_list;
         }
-
 
         return true;
     }

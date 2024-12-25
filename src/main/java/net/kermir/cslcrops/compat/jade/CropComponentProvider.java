@@ -6,17 +6,13 @@ import net.kermir.cslcrops.Cslcrops;
 import net.kermir.cslcrops.data.CropData;
 import net.kermir.cslcrops.data.CropsNSeedsData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -63,7 +59,7 @@ public class CropComponentProvider implements IBlockComponentProvider {
 
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
-        String blockResLoc = ForgeRegistries.BLOCKS.getKey(blockAccessor.getBlock()).toString();
+        @SuppressWarnings("DataFlowIssue") String blockResLoc = ForgeRegistries.BLOCKS.getKey(blockAccessor.getBlock()).toString();
 
         if (CropsNSeedsData.CROPS_MAP.containsKey(blockResLoc) && blockAccessor.getLevel() != null) {
             int temperature = (int) Math.round(Temperature.convert(Temperature.getTemperatureAt(blockAccessor.getPosition(), blockAccessor.getLevel()), Temperature.Units.MC, ClientSettingsConfig.USE_CELSIUS.get() ? Temperature.Units.C : Temperature.Units.F, true));
