@@ -31,6 +31,18 @@ public class PacketChannel {
                 .decoder(SyncDataPacket::new)
                 .consumerMainThread(SyncDataPacket::handle)
                 .add();
+
+        net.messageBuilder(ReqBlockTempData.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ReqBlockTempData::encode)
+                .decoder(ReqBlockTempData::new)
+                .consumerMainThread(ReqBlockTempData::handle)
+                .add();
+
+        net.messageBuilder(RecBlockTempData.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(RecBlockTempData::encode)
+                .decoder(RecBlockTempData::new)
+                .consumerMainThread(RecBlockTempData::handle)
+                .add();
     }
 
 
@@ -40,5 +52,9 @@ public class PacketChannel {
 
     public static <MSG> void sendToClient(MSG message, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+    }
+
+    public static <MSG> void sendToServer(MSG message) {
+        INSTANCE.sendToServer(message);
     }
 }

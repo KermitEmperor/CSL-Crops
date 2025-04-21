@@ -134,7 +134,6 @@ public class CropData implements INBTSerializable<CompoundTag> {
         if (nbt.contains("transforms_cold")) this.transformCold = new ResourceLocation(nbt.getString("transforms_cold"));
         if (nbt.contains("transforms_hot")) this.transformHot = new ResourceLocation(nbt.getString("transforms_hot"));
         if (nbt.contains("seed")) this.seedItem = new ResourceLocation(nbt.getString("seed"));
-
         if (nbt.contains("min")) this.minTemp = nbt.getInt("min");
         if (nbt.contains("max")) this.maxTemp = nbt.getInt("max");
     }

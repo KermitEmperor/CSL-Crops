@@ -5,8 +5,12 @@ import com.momosoftworks.coldsweat.config.spec.ClientSettingsConfig;
 import net.kermir.cslcrops.Cslcrops;
 import net.kermir.cslcrops.data.CropData;
 import net.kermir.cslcrops.data.CropsNSeedsData;
+import net.kermir.cslcrops.network.PacketChannel;
+import net.kermir.cslcrops.network.ReqBlockTempData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +19,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.registries.ForgeRegistries;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.Element;
@@ -23,6 +28,11 @@ import snownee.jade.api.ui.IElement;
 public class CropComponentProvider implements IBlockComponentProvider {
     public static CropComponentProvider INSTANCE = new CropComponentProvider();
     public static final ResourceLocation WIDGETS = new ResourceLocation(Cslcrops.MODID, "textures/gui/tooltip/widgets.png");
+    public static int curTemperature = 0;
+    public static int tickCounter = 0;
+    public static BlockPos curBlockPos = new BlockPos(0,0,0);
+    public static BlockPos clientBlockPos = new BlockPos(0,0,0);
+
     public static IElement gauge = new Element() {
         @Override
         public Vec2 getSize() {
@@ -62,7 +72,20 @@ public class CropComponentProvider implements IBlockComponentProvider {
         @SuppressWarnings("DataFlowIssue") String blockResLoc = ForgeRegistries.BLOCKS.getKey(blockAccessor.getBlock()).toString();
 
         if (CropsNSeedsData.CROPS_MAP.containsKey(blockResLoc) && blockAccessor.getLevel() != null) {
-            int temperature = (int) Math.round(Temperature.convert(Temperature.getTemperatureAt(blockAccessor.getPosition(), blockAccessor.getLevel()), Temperature.Units.MC, ClientSettingsConfig.USE_CELSIUS.get() ? Temperature.Units.C : Temperature.Units.F, true));
+            clientBlockPos = blockAccessor.getPosition();
+            
+            if (!clientBlockPos.equals(curBlockPos)) {
+                PacketChannel.sendToServer(new ReqBlockTempData(blockAccessor.getPosition()));
+                return;
+            } else {
+                if (tickCounter >= 40) {
+                    PacketChannel.sendToServer(new ReqBlockTempData(blockAccessor.getPosition()));
+                    tickCounter = 0;
+                } else tickCounter++;
+            }
+
+            int temperature = curTemperature;
+
             String tempType = ClientSettingsConfig.USE_CELSIUS.get() ? "°C" : "°F";
             CropData data = CropsNSeedsData.CROPS_MAP.get(blockResLoc);
 

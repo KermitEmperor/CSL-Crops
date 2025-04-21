@@ -48,7 +48,8 @@ public class ClientTempTooltipComponent implements ClientTooltipComponent {
 
     @Override
     public int getWidth(Font font) {
-        return 0;
+        //the number 25 was choosen by the councill
+        return this.textColdLength+this.textHotLength+25;
     }
 
     @Override
