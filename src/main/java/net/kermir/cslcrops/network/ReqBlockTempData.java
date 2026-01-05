@@ -2,6 +2,7 @@ package net.kermir.cslcrops.network;
 
 import com.momosoftworks.coldsweat.api.util.Temperature;
 import com.momosoftworks.coldsweat.config.spec.ClientSettingsConfig;
+import com.momosoftworks.coldsweat.util.world.WorldHelper;
 import net.kermir.cslcrops.Cslcrops;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +34,7 @@ public class ReqBlockTempData {
         if (context.getSender() == null) return true;
 
         context.enqueueWork(() -> {
-            double temperature = Temperature.getTemperatureAt(this.cropPos, context.getSender().level());
+            double temperature = WorldHelper.getTemperatureAt(context.getSender().level(), this.cropPos);
             PacketChannel.sendToClient(new RecBlockTempData(cropPos, temperature), context.getSender());
         });
 
