@@ -161,7 +161,7 @@ dependencies {
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
-    implementation fg.deobf("curse.maven:cold-sweat-506194:5874633")
+    implementation fg.deobf("curse.maven:cold-sweat-506194:7370183")
     implementation fg.deobf("curse.maven:jade-324717:5672013")
 
 
