@@ -3,6 +3,7 @@ package net.kermir.cslcrops;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.momosoftworks.coldsweat.api.util.Temperature;
+import com.momosoftworks.coldsweat.util.world.WorldHelper;
 import net.kermir.cslcrops.data.CropData;
 import net.kermir.cslcrops.data.CropsNSeedsData;
 import net.kermir.cslcrops.network.PacketChannel;
@@ -111,7 +112,7 @@ public class Cslcrops {
     @SuppressWarnings("DataFlowIssue")
     private void onTreeAndPlant(Level level, String blockResLoc, BlockPos blockPos, Event event) {
         if (CropsNSeedsData.CROPS_MAP.containsKey(blockResLoc)) {
-            double temp = Temperature.getTemperatureAt(blockPos, level);
+            double temp = WorldHelper.getTemperatureAt(level, blockPos);
             CropData data = CropsNSeedsData.CROPS_MAP.get(blockResLoc);
 
             if (data.isColder(temp, Temperature.Units.MC)) event.setResult(Event.Result.DENY);
